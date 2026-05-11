@@ -138,13 +138,30 @@ public class AddEditActivity extends AppCompatActivity {
         // Construction de l'objet
         PretBancaire pret = new PretBancaire(nomClient, nomBanque, montant, datePret, taux);
 
+        android.util.Log.d("PRET_DEBUG", "=== DONNÉES ENVOYÉES ===");
+        android.util.Log.d("PRET_DEBUG", "nom_client  : " + pret.getNomClient());
+        android.util.Log.d("PRET_DEBUG", "nom_banque  : " + pret.getNomBanque());
+        android.util.Log.d("PRET_DEBUG", "montant     : " + pret.getMontant());
+        android.util.Log.d("PRET_DEBUG", "date_pret   : " + pret.getDatePret());
+        android.util.Log.d("PRET_DEBUG", "taux_pret   : " + pret.getTauxPret());
+        android.util.Log.d("PRET_DEBUG", "montant_a_payer (calculé) : " + pret.getMontantAPayer());
+
+
         ApiService api = RetrofitClient.getInstance(this).create(ApiService.class);
 
         if (pretAModifier == null) {
             // Mode ajout
+            android.util.Log.d("PRET_DEBUG", "MODE : AJOUT");
             api.addPret(pret).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        String body = response.body() != null ? response.body().string() : "body null";
+                        android.util.Log.d("PRET_DEBUG", "AJOUT - Code: " + response.code());
+                        android.util.Log.d("PRET_DEBUG", "AJOUT - Réponse: " + body);
+                    } catch (Exception e) {
+                        android.util.Log.e("PRET_DEBUG", "AJOUT - Exception lecture body: " + e.getMessage());
+                    }
                     if (response.isSuccessful()) {
                         Toast.makeText(AddEditActivity.this, "Prêt ajouté !", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
@@ -155,15 +172,26 @@ public class AddEditActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    android.util.Log.e("PRET_DEBUG", "AJOUT - onFailure: " + t.getMessage());
                     Toast.makeText(AddEditActivity.this, "Erreur réseau : " + t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
+
         } else {
             // Mode modification
             pret.setNumCompte(pretAModifier.getNumCompte());
+            android.util.Log.d("PRET_DEBUG", "MODE : MODIFICATION");
+            android.util.Log.d("PRET_DEBUG", "num_compte  : " + pret.getNumCompte());
             api.updatePret(pret).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        String body = response.body() != null ? response.body().string() : "body null";
+                        android.util.Log.d("PRET_DEBUG", "MODIF - Code: " + response.code());
+                        android.util.Log.d("PRET_DEBUG", "MODIF - Réponse: " + body);
+                    } catch (Exception e) {
+                        android.util.Log.e("PRET_DEBUG", "MODIF - Exception lecture body: " + e.getMessage());
+                    }
                     if (response.isSuccessful()) {
                         Toast.makeText(AddEditActivity.this, "Prêt modifié !", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
@@ -174,6 +202,7 @@ public class AddEditActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    android.util.Log.e("PRET_DEBUG", "MODIF - onFailure: " + t.getMessage());
                     Toast.makeText(AddEditActivity.this, "Erreur réseau : " + t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });

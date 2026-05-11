@@ -156,17 +156,29 @@ public class MainActivity extends AppCompatActivity {
         apiService.deletePret(pret.getNumCompte()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Prêt supprimé", Toast.LENGTH_SHORT).show();
-                    chargerPrets();
-                } else {
-                    Toast.makeText(MainActivity.this,
-                            "Erreur suppression : " + response.code(), Toast.LENGTH_SHORT).show();
+                try {
+                    String body = response.body() != null ? response.body().string() : "body null";
+                    String errorBody = response.errorBody() != null ? response.errorBody().string() : "errorBody null";
+
+                    android.util.Log.d("DELETE_DEBUG", "Code: " + response.code());
+                    android.util.Log.d("DELETE_DEBUG", "Body: " + body);
+                    android.util.Log.d("DELETE_DEBUG", "ErrorBody: " + errorBody);
+                    android.util.Log.d("DELETE_DEBUG", "num_compte envoyé: " + pret.getNumCompte());
+
+                    if (response.isSuccessful()) {
+                        Toast.makeText(MainActivity.this, "Prêt supprimé", Toast.LENGTH_SHORT).show();
+                        runOnUiThread(() -> chargerPrets());
+                    } else {
+                        Toast.makeText(MainActivity.this,
+                                "Erreur : " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e("DELETE_DEBUG", "Exception: " + e.getMessage());
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                android.util.Log.e("DELETE_DEBUG", "onFailure: " + t.getMessage());
                 Toast.makeText(MainActivity.this,
                         "Erreur réseau : " + t.getMessage(), Toast.LENGTH_LONG).show();
             }

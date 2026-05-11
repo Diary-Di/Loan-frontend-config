@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">My loan</string>
-    <string name="base_url">https://a1b2c3d4.ngrok-free.app/pret_api/</string>
+    <string name="base_url">https://palpebral-unsolemnized-caitlin.ngrok-free.dev/pret_api/</string>
 </resources>
