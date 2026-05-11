@@ -1,115 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:padding="12dp">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp">
 
-    <!-- Ligne 1 : nom client + nom banque -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="4dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvNomClient"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="#212121"
-            android:text="Nom client" />
-
-        <TextView
-            android:id="@+id/tvNomBanque"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="#1565C0"
-            android:text="Banque" />
-
-    </LinearLayout>
-
-    <!-- Ligne 2 : date + montant initial -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="6dp">
-
-        <TextView
-            android:id="@+id/tvDatePret"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="12sp"
-            android:textColor="#757575"
-            android:text="Date" />
-
-        <TextView
-            android:id="@+id/tvMontant"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="#757575"
-            android:text="Montant : —" />
-
-    </LinearLayout>
-
-    <!-- Ligne 3 : montant à payer (mis en évidence) + boutons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
+        <!-- Ligne 1 : Nom Client + Banque -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tvNomClient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nom du client"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#212121" />
+
+            <TextView
+                android:id="@+id/tvNomBanque"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="À payer"
-                android:textSize="10sp"
+                android:text="Banque"
+                android:textSize="14sp"
+                android:textColor="#1565C0" />
+        </LinearLayout>
+
+        <!-- Ligne 2 : Date + Montant initial -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tvDatePret"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Date du prêt"
+                android:textSize="13sp"
                 android:textColor="#757575" />
 
             <TextView
-                android:id="@+id/tvMontantAPayer"
+                android:id="@+id/tvMontant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#C62828"
-                android:text="—" />
+                android:text="Montant : 0 Ar"
+                android:textSize="13sp"
+                android:textColor="#757575" />
         </LinearLayout>
 
-        <!-- Bouton Modifier -->
-        <Button
-            android:id="@+id/btnModifier"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:text="Modifier"
-            android:textSize="11sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#FB8C00"
-            android:layout_marginEnd="6dp" />
+        <!-- Ligne 3 : Montant à payer + Boutons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
 
-        <!-- Bouton Supprimer -->
-        <Button
-            android:id="@+id/btnSupprimer"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:text="Supprimer"
-            android:textSize="11sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#C62828" />
+            <!-- Montant à payer -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="À PAYER"
+                    android:textSize="12sp"
+                    android:textColor="#757575" />
+
+                <TextView
+                    android:id="@+id/tvMontantAPayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 Ar"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:textColor="#C62828" />
+            </LinearLayout>
+
+            <!-- Boutons -->
+            <Button
+                android:id="@+id/btnModifier"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Modifier"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#FB8C00"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnSupprimer"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Supprimer"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#C62828" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -31,7 +31,16 @@ public class PretAdapter extends ArrayAdapter<PretBancaire> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.item_pret, parent, false);
-            holder = new ViewHolder(convertView);
+
+            holder = new ViewHolder();
+            holder.tvNomClient     = convertView.findViewById(R.id.tvNomClient);
+            holder.tvNomBanque     = convertView.findViewById(R.id.tvNomBanque);
+            holder.tvDatePret      = convertView.findViewById(R.id.tvDatePret);
+            holder.tvMontant       = convertView.findViewById(R.id.tvMontant);
+            holder.tvMontantAPayer = convertView.findViewById(R.id.tvMontantAPayer);
+            holder.btnModifier     = convertView.findViewById(R.id.btnModifier);
+            holder.btnSupprimer    = convertView.findViewById(R.id.btnSupprimer);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -40,33 +49,23 @@ public class PretAdapter extends ArrayAdapter<PretBancaire> {
         PretBancaire pret = getItem(position);
         if (pret == null) return convertView;
 
-        // Remplissage des champs
+        // Remplissage des données
         holder.tvNomClient.setText(pret.getNomClient());
         holder.tvNomBanque.setText(pret.getNomBanque());
         holder.tvDatePret.setText("Date : " + pret.getDatePret());
         holder.tvMontant.setText(String.format("Montant : %,.0f Ar", pret.getMontant()));
         holder.tvMontantAPayer.setText(String.format("%,.0f Ar", pret.getMontantAPayer()));
 
-        // Boutons action
+        // Boutons
         holder.btnModifier.setOnClickListener(v -> listener.onEdit(pret));
         holder.btnSupprimer.setOnClickListener(v -> listener.onDelete(pret));
 
         return convertView;
     }
 
-    // ViewHolder pour éviter les findViewById répétitifs
+    // ViewHolder
     static class ViewHolder {
         TextView tvNomClient, tvNomBanque, tvDatePret, tvMontant, tvMontantAPayer;
         Button btnModifier, btnSupprimer;
-
-        ViewHolder(View view) {
-            tvNomClient     = view.findViewById(R.id.tvNomClient);
-            tvNomBanque     = view.findViewById(R.id.tvNomBanque);
-            tvDatePret      = view.findViewById(R.id.tvDatePret);
-            tvMontant       = view.findViewById(R.id.tvMontant);
-            tvMontantAPayer = view.findViewById(R.id.tvMontantAPayer);
-            btnModifier     = view.findViewById(R.id.btnModifier);
-            btnSupprimer    = view.findViewById(R.id.btnSupprimer);
-        }
     }
 }

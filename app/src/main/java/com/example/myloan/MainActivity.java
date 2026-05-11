@@ -3,7 +3,6 @@ package com.example.myloan;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +10,8 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,50 +25,63 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listViewPrets;
     private TextView tvTotal, tvMin, tvMax;
-    private Button btnAjouter, btnChart;
+    private BottomNavigationView bottomNavigation;
 
     private List<PretBancaire> listePrets = new ArrayList<>();
     private PretAdapter adapter;
     private ApiService apiService;
 
-    // Lance AddEditActivity et recharge la liste au retour
     private final ActivityResultLauncher<Intent> addEditLauncher =
-            registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     result -> {
                         if (result.getResultCode() == RESULT_OK) {
                             chargerPrets();
                         }
-                    }
-            );
+                    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        apiService = RetrofitClient.getInstance(this).create(ApiService.class);
-
         initViews();
+        setupApiService();
+        setupBottomNavigation();
         setupAdapter();
-
-        btnAjouter.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddEditActivity.class);
-            addEditLauncher.launch(intent);
-        });
-
-        btnChart.setOnClickListener(v -> ouvrirGraphique());
 
         chargerPrets();
     }
 
     private void initViews() {
         listViewPrets = findViewById(R.id.listViewPrets);
-        tvTotal       = findViewById(R.id.tvTotal);
-        tvMin         = findViewById(R.id.tvMin);
-        tvMax         = findViewById(R.id.tvMax);
-        btnAjouter    = findViewById(R.id.btnAjouter);
-        btnChart      = findViewById(R.id.btnChart);
+        tvTotal = findViewById(R.id.tvTotal);
+        tvMin = findViewById(R.id.tvMin);
+        tvMax = findViewById(R.id.tvMax);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+    }
+
+    private void setupApiService() {
+        apiService = RetrofitClient.getInstance(this).create(ApiService.class);
+    }
+
+    private void setupBottomNavigation() {
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_add) {
+                // Bouton Ajouter au milieu
+                Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
+                addEditLauncher.launch(intent);
+                return true;
+
+            } else if (id == R.id.nav_chart) {
+                ouvrirGraphique();
+                // Revenir automatiquement sur l'onglet Liste
+                bottomNavigation.setSelectedItemId(R.id.nav_list);
+                return true;
+            }
+            return true;
+        });
     }
 
     private void setupAdapter() {
@@ -87,10 +101,9 @@ public class MainActivity extends AppCompatActivity {
         listViewPrets.setAdapter(adapter);
     }
 
-    // --------------------------------------------------------
-    //  Chargement de tous les prêts depuis l'API
-    // --------------------------------------------------------
     private void chargerPrets() {
+        if (apiService == null) return;
+
         apiService.getAllPrets().enqueue(new Callback<List<PretBancaire>>() {
             @Override
             public void onResponse(Call<List<PretBancaire>> call, Response<List<PretBancaire>> response) {
@@ -99,34 +112,30 @@ public class MainActivity extends AppCompatActivity {
                     listePrets.addAll(response.body());
                     adapter.notifyDataSetChanged();
                     calculerStats();
+
+                    // Toast temporaire pour debug
+                    // Toast.makeText(MainActivity.this, listePrets.size() + " prêts chargés", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MainActivity.this,
-                            "Erreur chargement : " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Erreur chargement", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<PretBancaire>> call, Throwable t) {
-                Toast.makeText(MainActivity.this,
-                        "Erreur réseau : " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Erreur réseau", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    // --------------------------------------------------------
-    //  Calcul des statistiques (total, min, max)
-    // --------------------------------------------------------
     private void calculerStats() {
         if (listePrets.isEmpty()) {
-            tvTotal.setText("—");
-            tvMin.setText("—");
-            tvMax.setText("—");
+            tvTotal.setText("0 Ar");
+            tvMin.setText("0 Ar");
+            tvMax.setText("0 Ar");
             return;
         }
 
-        double total = 0;
-        double min   = Double.MAX_VALUE;
-        double max   = Double.MIN_VALUE;
+        double total = 0, min = Double.MAX_VALUE, max = Double.MIN_VALUE;
 
         for (PretBancaire p : listePrets) {
             double map = p.getMontantAPayer();
@@ -140,9 +149,6 @@ public class MainActivity extends AppCompatActivity {
         tvMax.setText(String.format("%,.0f Ar", max));
     }
 
-    // --------------------------------------------------------
-    //  Dialogue de confirmation avant suppression
-    // --------------------------------------------------------
     private void confirmerSuppression(PretBancaire pret) {
         new AlertDialog.Builder(this)
                 .setTitle("Supprimer")
@@ -156,38 +162,19 @@ public class MainActivity extends AppCompatActivity {
         apiService.deletePret(pret.getNumCompte()).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    String body = response.body() != null ? response.body().string() : "body null";
-                    String errorBody = response.errorBody() != null ? response.errorBody().string() : "errorBody null";
-
-                    android.util.Log.d("DELETE_DEBUG", "Code: " + response.code());
-                    android.util.Log.d("DELETE_DEBUG", "Body: " + body);
-                    android.util.Log.d("DELETE_DEBUG", "ErrorBody: " + errorBody);
-                    android.util.Log.d("DELETE_DEBUG", "num_compte envoyé: " + pret.getNumCompte());
-
-                    if (response.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Prêt supprimé", Toast.LENGTH_SHORT).show();
-                        runOnUiThread(() -> chargerPrets());
-                    } else {
-                        Toast.makeText(MainActivity.this,
-                                "Erreur : " + response.code(), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    android.util.Log.e("DELETE_DEBUG", "Exception: " + e.getMessage());
+                if (response.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Prêt supprimé", Toast.LENGTH_SHORT).show();
+                    chargerPrets();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                android.util.Log.e("DELETE_DEBUG", "onFailure: " + t.getMessage());
-                Toast.makeText(MainActivity.this,
-                        "Erreur réseau : " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Erreur suppression", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // --------------------------------------------------------
-    //  Ouvrir l'écran graphique avec les stats calculées
-    // --------------------------------------------------------
     private void ouvrirGraphique() {
         if (listePrets.isEmpty()) {
             Toast.makeText(this, "Aucune donnée à afficher", Toast.LENGTH_SHORT).show();
