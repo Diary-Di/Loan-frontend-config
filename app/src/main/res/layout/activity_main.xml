@@ -6,115 +6,118 @@
     android:layout_height="match_parent"
     android:background="#F8F9FA">
 
-    <!-- Contenu principal (Stats + Liste) -->
+    <!-- Contenu principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingBottom="85dp">
 
-        <!-- Statistiques en haut -->
+        <!-- Statistiques - 3 cartes compactes et uniformes -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="12dp"
+            android:gravity="center">
 
             <!-- Carte TOTAL -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:layout_marginEnd="6dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="12dp"
                     android:gravity="center">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TOTAL À PAYER"
-                        android:textSize="12sp"
+                        android:text="TOTAL"
+                        android:textSize="10sp"
                         android:textColor="#666666" />
                     <TextView
                         android:id="@+id/tvTotal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 Ar"
-                        android:textSize="21sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#1565C0" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Min & Max -->
-            <LinearLayout
+            <!-- Carte MIN -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="8dp">
+                android:layout_marginEnd="6dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp">
 
-                <com.google.android.material.card.MaterialCardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="3dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MIN"
-                            android:textSize="11sp"
-                            android:textColor="#666666"/>
-                        <TextView
-                            android:id="@+id/tvMin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 Ar"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#2E7D32"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
 
-                <com.google.android.material.card.MaterialCardView
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MIN"
+                        android:textSize="10sp"
+                        android:textColor="#666666" />
+                    <TextView
+                        android:id="@+id/tvMin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 Ar"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#2E7D32" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Carte MAX -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="3dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MAX"
-                            android:textSize="11sp"
-                            android:textColor="#666666"/>
-                        <TextView
-                            android:id="@+id/tvMax"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 Ar"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#C62828"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+                        android:text="MAX"
+                        android:textSize="10sp"
+                        android:textColor="#666666" />
+                    <TextView
+                        android:id="@+id/tvMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 Ar"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#C62828" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <!-- Liste des prêts -->
@@ -141,7 +144,7 @@
         app:itemTextColor="@color/bottom_nav_selector"
         app:labelVisibilityMode="labeled"/>
 
-    <!-- Bouton Ajouter (carré surélevé) -->
+    <!-- Bouton Ajouter carré -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
