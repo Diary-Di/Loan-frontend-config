@@ -6,21 +6,21 @@
     android:layout_height="match_parent"
     android:background="#F8F9FA">
 
-    <!-- Contenu principal -->
+    <!-- Contenu principal (Stats + Liste) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="70dp">
+        android:paddingBottom="85dp">
 
-        <!-- Statistiques -->
+        <!-- Statistiques en haut -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp">
 
-            <!-- TOTAL -->
+            <!-- Carte TOTAL -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -35,14 +35,12 @@
                     android:orientation="vertical"
                     android:padding="16dp"
                     android:gravity="center">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TOTAL À PAYER"
                         android:textSize="12sp"
                         android:textColor="#666666" />
-
                     <TextView
                         android:id="@+id/tvTotal"
                         android:layout_width="wrap_content"
@@ -54,7 +52,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Min et Max -->
+            <!-- Min & Max -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -68,7 +66,6 @@
                     android:layout_marginBottom="8dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="3dp">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,7 +93,6 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="3dp">
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -145,5 +141,17 @@
         app:itemTextColor="@color/bottom_nav_selector"
         app:labelVisibilityMode="labeled"/>
 
+    <!-- Bouton Ajouter (carré surélevé) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="#1565C0"
+        app:tint="#FFFFFF"
+        app:elevation="8dp"
+        app:shapeAppearanceOverlay="@style/SquareFAB" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -40,7 +40,7 @@ public class PretBancaire implements Serializable {
 
     // --------------------------------------------------------
     //  Formule métier : Montant à payer
-    //  MAP = montant + montant * (1 + taux)
+    //  MAP = montant * (1 + taux)
     // --------------------------------------------------------
     public double getMontantAPayer() {
         return montant * (1 + tauxPret);

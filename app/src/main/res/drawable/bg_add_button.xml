@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Fond coloré -->
+    <solid android:color="#1565C0" />
+
+    <!-- Bordure carrée blanche -->
+    <stroke
+        android:width="3dp"
+        android:color="#FFFFFF" />
+
+    <!-- Coins légèrement arrondis (moderne) -->
+    <corners android:radius="12dp" />
+
+    <!-- Ombre / Padding interne -->
+    <padding
+        android:left="8dp"
+        android:top="8dp"
+        android:right="8dp"
+        android:bottom="8dp" />
+</shape>

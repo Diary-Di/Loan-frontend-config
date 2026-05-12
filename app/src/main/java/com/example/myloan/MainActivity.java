@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private ListView listViewPrets;
     private TextView tvTotal, tvMin, tvMax;
     private BottomNavigationView bottomNavigation;
-
     private List<PretBancaire> listePrets = new ArrayList<>();
     private PretAdapter adapter;
     private ApiService apiService;
+
+    private FloatingActionButton fabAdd;
 
     private final ActivityResultLauncher<Intent> addEditLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -47,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         setupApiService();
         setupBottomNavigation();
+        fabAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
+            addEditLauncher.launch(intent);
+        });
         setupAdapter();
 
         chargerPrets();
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         tvTotal = findViewById(R.id.tvTotal);
         tvMin = findViewById(R.id.tvMin);
         tvMax = findViewById(R.id.tvMax);
+        fabAdd = findViewById(R.id.fab_add);
         bottomNavigation = findViewById(R.id.bottom_navigation);
     }
 
