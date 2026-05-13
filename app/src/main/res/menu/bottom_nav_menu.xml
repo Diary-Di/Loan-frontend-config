@@ -6,12 +6,6 @@
         android:icon="@drawable/ic_list"
         android:title="Liste" />
 
-    <!-- Bouton Ajouter au milieu -->
-    <item
-        android:id="@+id/nav_add"
-        android:icon="@drawable/ic_add"
-        android:title="Ajouter" />
-
     <item
         android:id="@+id/nav_chart"
         android:icon="@drawable/ic_chart"

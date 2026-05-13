@@ -13,6 +13,17 @@
         android:orientation="vertical"
         android:paddingBottom="85dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistiques des prêts"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="8dp" />
+
         <!-- Statistiques - 3 cartes compactes et uniformes -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -133,37 +144,156 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp" />
 
-        <!-- Liste des prêts -->
         <ListView
             android:id="@+id/listViewPrets"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:divider="#E0E0E0"
-            android:dividerHeight="12dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:paddingTop="4dp"
             android:paddingHorizontal="16dp"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:visibility="visible"/>
+
+        <!-- Section Graphes -->
+        <LinearLayout
+            android:id="@+id/sectionGraphes"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Sélecteur de type de graphe - BOUTONS AGRANDIS UNIQUEMENT -->
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="24dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:checkedButton="@id/btnHistogramme">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHistogramme"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:text="Histogramme"
+                    android:textSize="16sp"
+                    android:paddingHorizontal="32dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCamembert"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:text="Camembert"
+                    android:textSize="16sp"
+                    android:paddingHorizontal="32dp" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- BarChart -->
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="visible" />
+
+            <!-- PieChart -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <!-- Bottom Navigation custom (64dp) -->
+    <LinearLayout
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_gravity="bottom"
         android:background="#FFFFFF"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/bottom_nav_selector"
-        app:itemTextColor="@color/bottom_nav_selector"
-        app:labelVisibilityMode="labeled"/>
+        android:orientation="horizontal"
+        android:elevation="8dp">
 
-    <!-- Bouton Ajouter carré -->
+        <!-- Bouton Liste -->
+        <LinearLayout
+            android:id="@+id/nav_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_list"
+                android:contentDescription="Liste" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Liste"
+                android:textSize="11sp"
+                android:textColor="@color/bottom_nav_selector"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Espace central pour le FAB -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1" />
+
+        <!-- Bouton Graphique -->
+        <LinearLayout
+            android:id="@+id/nav_chart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_chart"
+                android:contentDescription="Graphique" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Graphique"
+                android:textSize="11sp"
+                android:textColor="@color/bottom_nav_selector"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Bouton Ajouter carré (Standard) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="6dp"
         android:src="@drawable/ic_add"
         app:backgroundTint="#1565C0"
         app:tint="#FFFFFF"

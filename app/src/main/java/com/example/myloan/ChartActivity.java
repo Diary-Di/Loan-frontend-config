@@ -2,7 +2,7 @@ package com.example.myloan;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +22,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.Button;
+
 public class ChartActivity extends AppCompatActivity {
 
     public static final String EXTRA_TOTAL = "extra_total";
@@ -30,8 +32,9 @@ public class ChartActivity extends AppCompatActivity {
 
     private BarChart barChart;
     private PieChart pieChart;
-    private Button btnHistogramme, btnCamembert, btnRetour;
+    private Button btnHistogramme, btnCamembert;
     private TextView tvChartTotal, tvChartMin, tvChartMax;
+    private LinearLayout navList, navChart;
 
     private double total, min, max;
 
@@ -40,7 +43,6 @@ public class ChartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
 
-        // Récupération des valeurs passées par MainActivity
         total = getIntent().getDoubleExtra(EXTRA_TOTAL, 0);
         min   = getIntent().getDoubleExtra(EXTRA_MIN, 0);
         max   = getIntent().getDoubleExtra(EXTRA_MAX, 0);
@@ -49,13 +51,12 @@ public class ChartActivity extends AppCompatActivity {
         afficherStats();
         setupHistogramme();
         setupCamembert();
-
-        // Afficher l'histogramme par défaut
         afficherHistogramme();
 
         btnHistogramme.setOnClickListener(v -> afficherHistogramme());
         btnCamembert.setOnClickListener(v -> afficherCamembert());
-        btnRetour.setOnClickListener(v -> finish());
+        navList.setOnClickListener(v -> finish());
+        navChart.setOnClickListener(v -> {});
     }
 
     private void initViews() {
@@ -63,10 +64,11 @@ public class ChartActivity extends AppCompatActivity {
         pieChart       = findViewById(R.id.pieChart);
         btnHistogramme = findViewById(R.id.btnHistogramme);
         btnCamembert   = findViewById(R.id.btnCamembert);
-        btnRetour      = findViewById(R.id.btnRetour);
         tvChartTotal   = findViewById(R.id.tvChartTotal);
         tvChartMin     = findViewById(R.id.tvChartMin);
         tvChartMax     = findViewById(R.id.tvChartMax);
+        navList        = findViewById(R.id.nav_list);
+        navChart       = findViewById(R.id.nav_chart);
     }
 
     private void afficherStats() {
@@ -82,23 +84,17 @@ public class ChartActivity extends AppCompatActivity {
         entries.add(new BarEntry(2f, (float) max));
 
         BarDataSet dataSet = new BarDataSet(entries, "Montant à payer (Ar)");
-        dataSet.setColors(
-                0xFF1565C0,  // bleu pour total
-                0xFF2E7D32,  // vert pour min
-                0xFFC62828   // rouge pour max
-        );
+        dataSet.setColors(0xFF1565C0, 0xFF2E7D32, 0xFFC62828);
         dataSet.setValueTextSize(11f);
 
         BarData barData = new BarData(dataSet);
         barChart.setData(barData);
 
-        // Étiquettes de l'axe X
         String[] labels = {"Total", "Min", "Max"};
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         barChart.getXAxis().setGranularity(1f);
         barChart.getXAxis().setDrawGridLines(false);
-
         barChart.getAxisRight().setEnabled(false);
         barChart.getDescription().setEnabled(false);
         barChart.getLegend().setEnabled(true);
@@ -113,11 +109,7 @@ public class ChartActivity extends AppCompatActivity {
         entries.add(new PieEntry((float) max,   "Max"));
 
         PieDataSet dataSet = new PieDataSet(entries, "Montant à payer");
-        dataSet.setColors(
-                0xFF1565C0,
-                0xFF2E7D32,
-                0xFFC62828
-        );
+        dataSet.setColors(0xFF1565C0, 0xFF2E7D32, 0xFFC62828);
         dataSet.setValueTextSize(12f);
         dataSet.setSliceSpace(3f);
 
@@ -133,18 +125,14 @@ public class ChartActivity extends AppCompatActivity {
     private void afficherHistogramme() {
         barChart.setVisibility(View.VISIBLE);
         pieChart.setVisibility(View.GONE);
-        btnHistogramme.setBackgroundTintList(
-                getColorStateList(android.R.color.holo_blue_dark));
-        btnCamembert.setBackgroundTintList(
-                getColorStateList(android.R.color.holo_blue_light));
+        btnHistogramme.setBackgroundTintList(getColorStateList(android.R.color.holo_blue_dark));
+        btnCamembert.setBackgroundTintList(getColorStateList(android.R.color.holo_blue_light));
     }
 
     private void afficherCamembert() {
         barChart.setVisibility(View.GONE);
         pieChart.setVisibility(View.VISIBLE);
-        btnCamembert.setBackgroundTintList(
-                getColorStateList(android.R.color.holo_blue_dark));
-        btnHistogramme.setBackgroundTintList(
-                getColorStateList(android.R.color.holo_blue_light));
+        btnCamembert.setBackgroundTintList(getColorStateList(android.R.color.holo_blue_dark));
+        btnHistogramme.setBackgroundTintList(getColorStateList(android.R.color.holo_blue_light));
     }
 }

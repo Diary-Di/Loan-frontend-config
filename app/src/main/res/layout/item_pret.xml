@@ -4,8 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
+    android:layout_marginTop="14dp"
+    android:layout_marginBottom="14dp"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="0dp"
     app:cardElevation="4dp"
     app:strokeWidth="0dp">
 
@@ -94,28 +98,24 @@
                     android:text="0 Ar"
                     android:textSize="19sp"
                     android:textStyle="bold"
-                    android:textColor="#C62828" />
+                    android:textColor="#EE040404" />
             </LinearLayout>
 
             <!-- Boutons -->
-            <Button
+            <ImageView
                 android:id="@+id/btnModifier"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="Modifier"
-                android:textSize="13sp"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#FB8C00"
-                android:layout_marginEnd="8dp" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_edit"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="Modifier" />
 
-            <Button
+            <ImageView
                 android:id="@+id/btnSupprimer"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="Supprimer"
-                android:textSize="13sp"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#C62828" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="Supprimer" />
 
         </LinearLayout>
 

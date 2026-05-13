@@ -1,178 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F8F9FA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
-        <!-- Titre dynamique (Ajouter / Modifier) -->
+        <!-- Titre dynamique -->
         <TextView
             android:id="@+id/tvTitreFormulaire"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ajouter un prêt"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#1565C0"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="32dp" />
 
         <!-- Nom du client -->
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nom du client"
-            android:textSize="13sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="4dp" />
+            android:hint="Nom du client"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/etNomClient"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Ex : Jean Rakoto"
-            android:inputType="textPersonName"
-            android:background="@drawable/edit_text_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_marginBottom="16dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNomClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Nom de la banque -->
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nom de la banque"
-            android:textSize="13sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="4dp" />
+            android:hint="Nom de la banque"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/etNomBanque"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Ex : BNI Madagascar"
-            android:inputType="text"
-            android:background="@drawable/edit_text_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_marginBottom="16dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNomBanque"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Montant -->
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Montant du prêt (Ar)"
-            android:textSize="13sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="4dp" />
+            android:hint="Montant du prêt"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp"
+            app:suffixText="Ar"
+            app:suffixTextColor="#1565C0">
 
-        <EditText
-            android:id="@+id/etMontant"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Ex : 5000000"
-            android:inputType="numberDecimal"
-            android:background="@drawable/edit_text_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_marginBottom="16dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMontant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Date du prêt -->
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date du prêt"
-            android:textSize="13sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="4dp" />
+            android:hint="Date du prêt"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="16dp">
 
-        <EditText
-            android:id="@+id/etDatePret"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="YYYY-MM-DD"
-            android:inputType="date"
-            android:background="@drawable/edit_text_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:focusable="false"
-            android:clickable="true"
-            android:layout_marginBottom="16dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDatePret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Taux du prêt -->
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Taux du prêt (ex: 0.12 pour 12%)"
-            android:textSize="13sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="4dp" />
+            android:hint="Taux du prêt"
+            app:suffixText="%"
+            app:suffixTextColor="#1565C0"
+            app:helperText="Saisissez le pourcentage annuel (ex: 12)"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="32dp">
 
-        <EditText
-            android:id="@+id/etTauxPret"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Ex : 0.12"
-            android:inputType="numberDecimal"
-            android:background="@drawable/edit_text_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:layout_marginBottom="24dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTauxPret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Aperçu montant à payer -->
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#E3F2FD"
-            android:padding="12dp"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#BBDEFB"
+            app:cardBackgroundColor="#E3F2FD">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Montant à payer estimé :"
-                android:textSize="13sp"
-                android:textColor="#1565C0" />
+                android:padding="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tvPreviewMAP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="—"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#C62828" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Montant à payer estimé"
+                    android:textSize="14sp"
+                    android:textColor="#1565C0"
+                    android:textStyle="bold" />
 
-        <!-- Boutons -->
+                <TextView
+                    android:id="@+id/tvPreviewMAP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#C62828" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Boutons d'action -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAnnuler"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
                 android:text="Annuler"
-                android:textColor="#1565C0"
-                android:backgroundTint="#FFFFFF"
+                android:textColor="#757575"
                 android:layout_marginEnd="8dp" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEnregistrer"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:layout_weight="1.5"
                 android:text="Enregistrer"
-                android:textColor="#FFFFFF"
+                app:cornerRadius="12dp"
                 android:backgroundTint="#1565C0" />
 
         </LinearLayout>

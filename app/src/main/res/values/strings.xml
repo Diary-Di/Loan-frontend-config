@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">My loan</string>
     <string name="base_url">https://palpebral-unsolemnized-caitlin.ngrok-free.dev/pret_api/</string>
-    <string name="title_mes_prets">Liste des Prêts</string>
+    <string name="title_mes_prets">Liste des prêts</string>
+    <string name="title_representation_graphique">Représentation graphique</string>
 </resources>

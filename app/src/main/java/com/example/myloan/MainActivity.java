@@ -3,6 +3,9 @@ package com.example.myloan;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,8 +14,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +37,17 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listViewPrets;
-    private TextView tvTotal, tvMin, tvMax;
-    private BottomNavigationView bottomNavigation;
+    private TextView tvTotal, tvMin, tvMax, tvListeTitre;
+    private LinearLayout navList, navChart, sectionGraphes;
     private List<PretBancaire> listePrets = new ArrayList<>();
     private PretAdapter adapter;
     private ApiService apiService;
+    private com.google.android.material.floatingactionbutton.FloatingActionButton fabAdd;
 
-    private FloatingActionButton fabAdd;
+    // Graphes
+    private BarChart barChart;
+    private PieChart pieChart;
+    private MaterialButtonToggleGroup toggleGroup;
 
     private final ActivityResultLauncher<Intent> addEditLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -49,22 +65,30 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         setupApiService();
         setupBottomNavigation();
+        setupChartButtons();
+
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
             addEditLauncher.launch(intent);
         });
-        setupAdapter();
 
+        setupAdapter();
         chargerPrets();
     }
 
     private void initViews() {
-        listViewPrets = findViewById(R.id.listViewPrets);
-        tvTotal = findViewById(R.id.tvTotal);
-        tvMin = findViewById(R.id.tvMin);
-        tvMax = findViewById(R.id.tvMax);
-        fabAdd = findViewById(R.id.fab_add);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
+        listViewPrets  = findViewById(R.id.listViewPrets);
+        tvTotal        = findViewById(R.id.tvTotal);
+        tvMin          = findViewById(R.id.tvMin);
+        tvMax          = findViewById(R.id.tvMax);
+        tvListeTitre  = findViewById(R.id.tvListeTitre);
+        fabAdd         = findViewById(R.id.fab_add);
+        navList        = findViewById(R.id.nav_list);
+        navChart       = findViewById(R.id.nav_chart);
+        sectionGraphes = findViewById(R.id.sectionGraphes);
+        barChart       = findViewById(R.id.barChart);
+        pieChart       = findViewById(R.id.pieChart);
+        toggleGroup    = findViewById(R.id.toggleGroup);
     }
 
     private void setupApiService() {
@@ -72,23 +96,117 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigation() {
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
+        navList.setOnClickListener(v -> afficherListe());
+        navChart.setOnClickListener(v -> afficherGraphes());
+    }
 
-            if (id == R.id.nav_add) {
-                // Bouton Ajouter au milieu
-                Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
-                addEditLauncher.launch(intent);
-                return true;
+    private void afficherListe() {
+        tvListeTitre.setText(R.string.title_mes_prets);
+        listViewPrets.setVisibility(View.VISIBLE);
+        sectionGraphes.setVisibility(View.GONE);
+        fabAdd.setVisibility(View.VISIBLE);
+    }
 
-            } else if (id == R.id.nav_chart) {
-                ouvrirGraphique();
-                // Revenir automatiquement sur l'onglet Liste
-                bottomNavigation.setSelectedItemId(R.id.nav_list);
-                return true;
+    private void afficherGraphes() {
+        if (listePrets.isEmpty()) {
+            Toast.makeText(this, "Aucune donnée à afficher", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        tvListeTitre.setText(R.string.title_representation_graphique);
+        listViewPrets.setVisibility(View.GONE);
+        sectionGraphes.setVisibility(View.VISIBLE);
+        fabAdd.setVisibility(View.VISIBLE);
+        setupHistogramme();
+        setupCamembert();
+        
+        // Afficher le graphe correspondant au bouton sélectionné
+        if (toggleGroup.getCheckedButtonId() == R.id.btnCamembert) {
+            afficherCamembert();
+        } else {
+            afficherHistogramme();
+        }
+    }
+
+    private void setupChartButtons() {
+        toggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                if (checkedId == R.id.btnHistogramme) {
+                    afficherHistogramme();
+                } else if (checkedId == R.id.btnCamembert) {
+                    afficherCamembert();
+                }
             }
-            return true;
         });
+    }
+
+    private void afficherHistogramme() {
+        barChart.setVisibility(View.VISIBLE);
+        pieChart.setVisibility(View.GONE);
+    }
+
+    private void afficherCamembert() {
+        barChart.setVisibility(View.GONE);
+        pieChart.setVisibility(View.VISIBLE);
+    }
+
+    private void setupHistogramme() {
+        double total = 0, min = Double.MAX_VALUE, max = Double.MIN_VALUE;
+        for (PretBancaire p : listePrets) {
+            double map = p.getMontantAPayer();
+            total += map;
+            if (map < min) min = map;
+            if (map > max) max = map;
+        }
+
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0f, (float) total));
+        entries.add(new BarEntry(1f, (float) min));
+        entries.add(new BarEntry(2f, (float) max));
+
+        BarDataSet dataSet = new BarDataSet(entries, "Montant à payer (Ar)");
+        dataSet.setColors(0xFF1565C0, 0xFF2E7D32, 0xFFC62828);
+        dataSet.setValueTextSize(11f);
+
+        BarData barData = new BarData(dataSet);
+        barChart.setData(barData);
+
+        String[] labels = {"Total", "Min", "Max"};
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getXAxis().setGranularity(1f);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getDescription().setEnabled(false);
+        barChart.animateY(800);
+        barChart.invalidate();
+    }
+
+    private void setupCamembert() {
+        double total = 0, min = Double.MAX_VALUE, max = Double.MIN_VALUE;
+        for (PretBancaire p : listePrets) {
+            double map = p.getMontantAPayer();
+            total += map;
+            if (map < min) min = map;
+            if (map > max) max = map;
+        }
+
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry((float) total, "Total"));
+        entries.add(new PieEntry((float) min,   "Min"));
+        entries.add(new PieEntry((float) max,   "Max"));
+
+        PieDataSet dataSet = new PieDataSet(entries, "Montant à payer");
+        dataSet.setColors(0xFF1565C0, 0xFF2E7D32, 0xFFC62828);
+        dataSet.setValueTextSize(12f);
+        dataSet.setSliceSpace(3f);
+
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setEntryLabelTextSize(12f);
+        pieChart.animateY(800);
+        pieChart.invalidate();
     }
 
     private void setupAdapter() {
@@ -119,9 +237,6 @@ public class MainActivity extends AppCompatActivity {
                     listePrets.addAll(response.body());
                     adapter.notifyDataSetChanged();
                     calculerStats();
-
-                    // Toast temporaire pour debug
-                    // Toast.makeText(MainActivity.this, listePrets.size() + " prêts chargés", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "Erreur chargement", Toast.LENGTH_SHORT).show();
                 }
@@ -143,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         double total = 0, min = Double.MAX_VALUE, max = Double.MIN_VALUE;
-
         for (PretBancaire p : listePrets) {
             double map = p.getMontantAPayer();
             total += map;
@@ -180,26 +294,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Erreur suppression", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void ouvrirGraphique() {
-        if (listePrets.isEmpty()) {
-            Toast.makeText(this, "Aucune donnée à afficher", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        double total = 0, min = Double.MAX_VALUE, max = Double.MIN_VALUE;
-        for (PretBancaire p : listePrets) {
-            double map = p.getMontantAPayer();
-            total += map;
-            if (map < min) min = map;
-            if (map > max) max = map;
-        }
-
-        Intent intent = new Intent(this, ChartActivity.class);
-        intent.putExtra(ChartActivity.EXTRA_TOTAL, total);
-        intent.putExtra(ChartActivity.EXTRA_MIN, min);
-        intent.putExtra(ChartActivity.EXTRA_MAX, max);
-        startActivity(intent);
     }
 }
